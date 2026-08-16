@@ -1,0 +1,35 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+
+# Allow crawling of assets
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+
+# Sitemap location
+Sitemap: https://www.throtalyatry.com/sitemap.xml
+
+# Specific bot rules
+User-agent: GoogleBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: MJ12bot
+Crawl-delay: 10
+
+# Bad bots - block them
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
