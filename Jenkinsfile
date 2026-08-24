@@ -5,63 +5,77 @@ pipeline {
     environment {
         IMAGE_NAME = "throttleyatry"
         CONTAINER_NAME = "throttleyatry"
+        APP_PORT = "8081"
     }
 
     stages {
 
         stage('Checkout') {
             steps {
+                echo 'Checking out code from GitHub...'
                 checkout scm
             }
         }
 
-        stage('Validate Website') {
+        stage('Validate') {
             steps {
                 echo 'Validating website...'
 
-                bat '''
-                    if not exist index.html exit /b 1
-                    if not exist css exit /b 1
-                    if not exist js exit /b 1
-                    if not exist assets exit /b 1
+                sh '''
+                    test -f index.html
+                    test -d css
+                    test -d js
+                    test -d assets
+
+                    echo "Website validation successful"
                 '''
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Docker Build') {
             steps {
-                bat '''
-                    docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .
-                    docker tag %IMAGE_NAME%:%BUILD_NUMBER% %IMAGE_NAME%:latest
+                echo 'Building Docker image...'
+
+                sh '''
+                    docker build \
+                    -t ${IMAGE_NAME}:${BUILD_NUMBER} \
+                    -t ${IMAGE_NAME}:latest .
                 '''
             }
         }
 
         stage('Stop Old Container') {
             steps {
-                bat '''
-                    docker rm -f %CONTAINER_NAME% 2>NUL || exit /b 0
+                echo 'Stopping old container...'
+
+                sh '''
+                    docker rm -f ${CONTAINER_NAME} || true
                 '''
             }
         }
 
-        stage('Deploy Container') {
+        stage('Deploy') {
             steps {
-                bat '''
-                    docker run -d ^
-                    --name %CONTAINER_NAME% ^
-                    -p 8081:80 ^
-                    --restart unless-stopped ^
-                    %IMAGE_NAME%:%BUILD_NUMBER%
+                echo 'Deploying application...'
+
+                sh '''
+                    docker run -d \
+                    --name ${CONTAINER_NAME} \
+                    -p ${APP_PORT}:80 \
+                    --restart unless-stopped \
+                    ${IMAGE_NAME}:${BUILD_NUMBER}
                 '''
             }
         }
 
         stage('Health Check') {
             steps {
-                bat '''
-                    timeout /t 5 /nobreak >NUL
-                    curl -f http://localhost:8081/
+                echo 'Checking application health...'
+
+                sh '''
+                    sleep 5
+                    curl -f http://localhost:${APP_PORT}/
+                    echo "Application is healthy"
                 '''
             }
         }
@@ -82,7 +96,7 @@ pipeline {
         }
 
         always {
-            bat 'docker ps'
+            sh 'docker ps'
         }
     }
 }
