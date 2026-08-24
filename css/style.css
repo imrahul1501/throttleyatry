@@ -36,6 +36,12 @@
   --glass-bg: rgb(0, 0, 0);
   --glass-border: rgba(255, 255, 255, 0.2);
   --glass-blur: blur(16px);
+  --color-surface: #ffffff;
+  --color-surface-dark: #1e293b;
+  --color-bg-alt: #e8ecf2;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
 }
 
 [data-theme="dark"] {
@@ -58,6 +64,12 @@
   --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
   --glass-bg: rgba(15, 23, 42, 0.75);
   --glass-border: rgba(255, 255, 255, 0.08);
+  --color-surface: #1e293b;
+  --color-surface-dark: #0f172a;
+  --color-bg-alt: #1e293b;
+  --color-text: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
 }
 
 /* â”€â”€ Reset & Base â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -244,6 +256,53 @@ p {
 .section-header.center .section-subtitle {
   margin-left: auto;
   margin-right: auto;
+}
+
+.why-choose-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.why-choose-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  min-width: 0;
+  height: 100%;
+  padding: 1.5rem;
+  background: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.why-choose-icon {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 58, 143, 0.1);
+  border-radius: var(--radius-md);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.why-choose-content {
+  min-width: 0;
+}
+
+.why-choose-content h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.0625rem;
+}
+
+.why-choose-content p {
+  margin-bottom: 0;
+  font-size: 0.9rem;
 }
 
 /* â”€â”€ Container & Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -447,6 +506,15 @@ p {
   height: 100%;
 }
 
+.header > .container {
+  height: 100%;
+}
+
+.navbar .nav-menu,
+.navbar .nav-actions {
+  align-items: center;
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -561,11 +629,17 @@ p {
   color: var(--accent);
   transition: all var(--transition);
   font-size: 1.125rem;
+  border: 1px solid transparent;
+  cursor: pointer;
 }
 
 .theme-toggle:hover {
   background: rgba(255, 255, 255, 0.12);
   color: var(--secondary);
+}
+
+[data-theme="dark"] .theme-toggle {
+  border-color: var(--glass-border);
 }
 
 .hamburger {
@@ -1895,9 +1969,11 @@ p {
 
 .chatbot-panel {
   position: fixed;
-  right: 1.25rem;
+  left: auto;
+  right: 1rem;
   bottom: 6.5rem;
-  width: min(92vw, 360px);
+  width: min(calc(100vw - 2rem), 360px);
+  max-height: calc(100dvh - 8rem);
   background: var(--secondary-dark);
   color: var(--accent);
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -1931,6 +2007,8 @@ p {
 
 .chatbot-panel__body {
   padding: 0.9rem 1rem 1rem;
+  max-height: calc(100dvh - 12rem);
+  overflow-y: auto;
 }
 
 .chatbot-panel__text {

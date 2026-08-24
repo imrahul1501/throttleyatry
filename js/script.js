@@ -35,7 +35,7 @@ function injectHeader() {
             <li class="nav-item"><a href="index.html" class="nav-link navbar__link">Home</a></li>
             <li class="nav-item"><a href="about.html" class="nav-link navbar__link">About</a></li>
             <li class="nav-item navbar__dropdown">
-              <a href="#" class="nav-link navbar__link navbar__dropdown-btn">Rentals ▾</a>
+              <a href="#" class="nav-link navbar__link navbar__dropdown-btn" aria-expanded="false" aria-haspopup="true">Rentals ▾</a>
               <div class="dropdown navbar__dropdown-menu">
                 <a href="bike-rental.html" class="dropdown-link">Bike Rental</a>
                 <a href="car-rental.html" class="dropdown-link">Car Rental</a>
@@ -51,7 +51,7 @@ function injectHeader() {
         </nav>
 
         <div class="nav-actions navbar__actions">
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">🌓</button>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">🌓</button>
           <a href="${PHONE}" class="btn btn-primary btn-sm">
             <span aria-hidden="true">📞</span>
             <span>Call Now</span>
@@ -469,6 +469,7 @@ function initMobileNav() {
     if (!btn) return;
 
     btn.addEventListener('click', (e) => {
+      e.preventDefault();
       e.stopPropagation();
       const isOpen = dropdown.classList.toggle('is-open');
       btn.setAttribute('aria-expanded', String(isOpen));
@@ -494,6 +495,12 @@ function initThemeSwitcher() {
   const applyTheme = (theme) => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('throtalyatry-theme', theme);
+    if (toggle) {
+      const isDark = theme === 'dark';
+      toggle.setAttribute('aria-pressed', String(isDark));
+      toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      toggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    }
   };
 
   if (savedTheme) {
